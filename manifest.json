@@ -1,0 +1,13 @@
+{
+  "manifest_version": 2,
+
+  "name": "Un-Safelink Outlook",
+  "version": "0.0.1",
+  "description": "Replace safelink urls by the original one",
+
+  "content_scripts": [{
+    "js": ["content.js"],
+    "matches": ["https://outlook.live.com/mail/*"]
+  }]
+
+}
