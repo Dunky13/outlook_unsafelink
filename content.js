@@ -1,3 +1,5 @@
+// Inspired by: https://techcommunity.microsoft.com/t5/Outlook/Advanced-Threat-Protection-ATP-is-ruining-Outlook-com/m-p/176534/highlight/true#M1632
+// -- https://1drv.ms/u/s!AL3JpMLcNI_DlrV7
 function replaceUrls() {
   var urls = [...document.getElementsByTagName('a')].filter(x => x.href.indexOf('safelinks.protection.outlook.com') > 0)
   for (var i = 0, l = urls.length; i < l; i++) {
