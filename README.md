@@ -1,4 +1,5 @@
 # Un-Safelink Outlook [Install here](https://chrome.google.com/webstore/detail/pgchfppjhohfigdgfnglmbbeiingokmi/)
+[![CircleCI](https://circleci.com/gh/Dunky13/outlook_unsafelink.svg?style=svg)](https://circleci.com/gh/Dunky13/outlook_unsafelink)
 
 Microsoft has introduced "safelinks" that supposedly scans url for malicious contents.
 
