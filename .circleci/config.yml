@@ -18,7 +18,7 @@ jobs:
           command: git archive -o unsafelink.zip HEAD
       - run:
           name: "Test"
-          command: unzip unsafelink.zip && cat unsafelink*/manifest.json
+          command: mkdir test_unsafe && unzip unsafelink.zip -d test_unsafe && cat test_unsafe/manifest.json
       - run:
           name: "Upload & Publish Extension to the Google Chrome Store"
           command: publish unsafelink.zip
