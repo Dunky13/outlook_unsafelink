@@ -9,23 +9,13 @@ jobs:
       - checkout
       - run:
           name: "Install Dependencies"
-          command: apk update; apk add zip #echo "You can also install Yarn, NPM, or anything else you need to use to build and test your extension."
+          command: apk update; apk add zip 
       - run:
           name: "Run Production ready"
-          command: jq '.version = "0.1.'${CIRCLE_BUILD_NUM}'"' manifest.json | sponge manifest.json && pwd && ls -lahF .
+          command: jq '.version = "0.1.'${CIRCLE_BUILD_NUM}'"' manifest.json | sponge manifest.json
       - run:
           name: "Package Extension"
           command: zip -r unsafelink.zip . -x *.git*
-          #git archive -o unsafelink.zip HEAD
-      - run:
-          name: "Test"
-          command: mkdir test_unsafe && unzip unsafelink.zip -d test_unsafe && cat test_unsafe/manifest.json
       - run:
           name: "Upload & Publish Extension to the Google Chrome Store"
           command: publish unsafelink.zip
-#           command: |
-#             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-#               ACCESS_TOKEN=$(curl "https://accounts.google.com/o/oauth2/token" -d "client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&refresh_token=${REFRESH_TOKEN}&grant_type=refresh_token&redirect_uri=urn:ietf:wg:oauth:2.0:oob" | jq -r .access_token)
-#               curl -H "Authorization: Bearer ${ACCESS_TOKEN}" -H "x-goog-api-version: 2" -X PUT -T unsafelink.zip -v "https://www.googleapis.com/upload/chromewebstore/v1.1/items/${APP_ID}"
-#               curl -H "Authorization: Bearer ${ACCESS_TOKEN}" -H "x-goog-api-version: 2" -H "Content-Length: 0" -X POST -v "https://www.googleapis.com/chromewebstore/v1.1/items/${APP_ID}/publish"
-#             fi
