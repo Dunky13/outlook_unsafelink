@@ -11,8 +11,8 @@ jobs:
           name: "Install Dependencies"
           command: echo "You can also install Yarn, NPM, or anything else you need to use to build and test your extension."
       - run:
-          name: "Run Tests"
-          command: echo "Run any tests here."
+          name: "Run Production ready"
+          command: jq '.version = "0.0.3"' manifest.json | sponge manifest.json
       - run:
           name: "Package Extension"
           command: git archive -o unsafelink.zip HEAD
