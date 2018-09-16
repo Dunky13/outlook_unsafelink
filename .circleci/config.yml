@@ -11,7 +11,7 @@ jobs:
           name: "Install Dependencies"
           command: |
             apt-get update
-            apt-get -y install curl jq
+            apt-get -y install curl jq git
             # You can also install Yarn, NPM, or anything else you need to use to build and test your extension.
       - run:
           name: "Run Tests"
