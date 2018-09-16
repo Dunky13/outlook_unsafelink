@@ -15,7 +15,7 @@ jobs:
           command: jq '.version = "0.1.'${CIRCLE_BUILD_NUM}'"' manifest.json | sponge manifest.json && pwd && ls -lahF .
       - run:
           name: "Package Extension"
-          command: zip -r unsafelink.zip .
+          command: zip -r unsafelink.zip . -x *.git*
           #git archive -o unsafelink.zip HEAD
       - run:
           name: "Test"
