@@ -1,0 +1,29 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: ubuntu:16.04
+    environment:
+      - APP_ID: "pgchfppjhohfigdgfnglmbbeiingokmi"
+    steps:
+      - checkout
+      - run:
+          name: "Install Dependencies"
+          command: |
+            apt-get update
+            apt-get -y install curl jq
+            # You can also install Yarn, NPM, or anything else you need to use to build and test your extension.
+      - run:
+          name: "Run Tests"
+          command: echo "Run any tests here."
+      - run:
+          name: "Package Extension"
+          command: git archive -o unsafelink.zip HEAD
+      - run:
+          name: "Upload & Publish Extension to the Google Chrome Store"
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              ACCESS_TOKEN=$(curl "https://accounts.google.com/o/oauth2/token" -d "client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&refresh_token=${REFRESH_TOKEN}&grant_type=refresh_token&redirect_uri=urn:ietf:wg:oauth:2.0:oob" | jq -r .access_token)
+              curl -H "Authorization: Bearer ${ACCESS_TOKEN}" -H "x-goog-api-version: 2" -X PUT -T pointless.zip -v "https://www.googleapis.com/upload/chromewebstore/v1.1/items/${APP_ID}"
+              curl -H "Authorization: Bearer ${ACCESS_TOKEN}" -H "x-goog-api-version: 2" -H "Content-Length: 0" -X POST -v "https://www.googleapis.com/chromewebstore/v1.1/items/${APP_ID}/publish"
+            fi
