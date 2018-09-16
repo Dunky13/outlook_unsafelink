@@ -12,7 +12,7 @@ jobs:
           command: echo "You can also install Yarn, NPM, or anything else you need to use to build and test your extension."
       - run:
           name: "Run Production ready"
-          command: jq '.version = "0.0.'${CIRCLE_BUILD_NUM}'"' manifest.json | sponge manifest.json && cat manifest.json
+          command: jq '.version = "0.1.'${CIRCLE_BUILD_NUM}'"' manifest.json | sponge manifest.json && cat manifest.json
       - run:
           name: "Package Extension"
           command: git archive -o unsafelink.zip HEAD
