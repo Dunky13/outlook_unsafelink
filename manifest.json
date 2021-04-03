@@ -13,7 +13,7 @@
   },
   "content_scripts": [{
     "js": ["content.js"],
-    "matches": ["https://outlook.live.com/mail/*", "https://outlook.live.com/owa/*","https://outlook.office.com/owa/*"]
+    "matches": ["https://outlook.live.com/mail/*", "https://outlook.live.com/owa/*","https://outlook.office.com/owa/*","https://outlook.office.com/mail/*"]
   }]
 
 }
