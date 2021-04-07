@@ -2,7 +2,7 @@
   "manifest_version": 2,
 
   "name": "Un-Safelink Outlook",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Replace safelink urls by the original one",
   "homepage_url": "https://github.com/Dunky13/outlook_unsafelink",
   "icons": {
