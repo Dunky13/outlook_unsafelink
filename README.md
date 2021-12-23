@@ -15,3 +15,7 @@ This extension was inspired by a thread in the Microsoft techcommunity:
 https://techcommunity.microsoft.com/t5/Outlook/Advanced-Threat-Protection-ATP-is-ruining-Outlook-com/m-p/176534/highlight/true#M1632
 
 Which links to: https://1drv.ms/u/s!AL3JpMLcNI_DlrV7
+
+
+# Donations
+If you like what I do, please consider donating to continue this development as https://www.buymeacoffee.com/developwent
