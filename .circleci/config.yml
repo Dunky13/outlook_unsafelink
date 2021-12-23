@@ -16,6 +16,9 @@ jobs:
       - run:
           name: "Package Extension"
           command: zip -r unsafelink.zip . -x *.git*
+      - store_artifacts:
+          path: unsafelink.zip
+          destination: unsafelink.zip
       - run:
           name: "Upload & Publish Extension to the Google Chrome Store"
           command: publish unsafelink.zip
