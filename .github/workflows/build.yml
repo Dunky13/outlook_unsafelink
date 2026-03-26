@@ -1,0 +1,38 @@
+name: Build and Publish Chrome Extension
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      APP_ID: "pgchfppjhohfigdgfnglmbbeiingokmi"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        run: sudo apt-get install -y jq moreutils zip
+
+      - name: Set Version in Manifest
+        run: jq '.version = "0.2.${{ github.run_number }}"' manifest.json | sponge manifest.json
+
+      - name: Package Extension
+        run: zip -r unsafelink.zip . -x "*.git*"
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: unsafelink
+          path: unsafelink.zip
+
+      - name: Publish to Chrome Web Store
+        run: npx chrome-webstore-upload-cli@2 upload --auto-publish --source unsafelink.zip --extension-id $APP_ID
+        env:
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
