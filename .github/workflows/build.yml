@@ -1,6 +1,7 @@
 name: Build and Publish Chrome Extension
 
 on:
+  pull_request:
   push:
     branches:
       - main
@@ -15,14 +16,28 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Check Chrome Web Store configuration
+        if: github.event_name == 'push'
+        env:
+          PUBLISHER_ID: ${{ vars.CHROME_PUBLISHER_ID }}
+        run: ': "${PUBLISHER_ID:?Set the CHROME_PUBLISHER_ID repository variable to your Chrome Web Store publisher ID}"'
+
       - name: Install Dependencies
         run: sudo apt-get install -y jq moreutils zip
+
+      - name: Check JavaScript syntax
+        run: node --check content.js
 
       - name: Set Version in Manifest
         run: jq '.version = "0.2.${{ github.run_number }}"' manifest.json | sponge manifest.json
 
       - name: Package Extension
-        run: zip -r unsafelink.zip . -x "*.git*"
+        run: zip -r unsafelink.zip manifest.json content.js images LICENSE
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
@@ -30,9 +45,13 @@ jobs:
           name: unsafelink
           path: unsafelink.zip
 
-      - name: Publish to Chrome Web Store
-        run: npx chrome-webstore-upload-cli@2 upload --auto-publish --source unsafelink.zip --extension-id $APP_ID
+      - name: Upload and submit to Chrome Web Store (API v2)
+        if: github.event_name == 'push'
+        # Omitting the subcommand uploads AND submits; `upload` alone only uploads.
+        run: npx --yes chrome-webstore-upload-cli@4.0.2 --source unsafelink.zip
         env:
+          PUBLISHER_ID: ${{ vars.CHROME_PUBLISHER_ID }}
+          EXTENSION_ID: ${{ env.APP_ID }}
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
           CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
           REFRESH_TOKEN: ${{ secrets.REFRESH_TOKEN }}
