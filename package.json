@@ -1,0 +1,11 @@
+{
+  "name": "outlook-unsafelink",
+  "private": true,
+  "scripts": {
+    "publish:cws": "node scripts/publish-cws.mjs",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "devDependencies": {
+    "chrome-webstore-upload": "6.0.1"
+  }
+}
