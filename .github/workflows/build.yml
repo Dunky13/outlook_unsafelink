@@ -1,11 +1,28 @@
 name: Build and Publish Chrome Extension
 
 on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: Check store status or upload and publish
+        type: choice
+        options: [status, publish]
+        default: status
   pull_request:
   push:
     branches:
       - main
       - master
+    paths:
+      - '*.js'
+      - 'manifest.json'
+      - 'images/**'
+      - 'LICENSE'
+      - 'LISENCE'
+      - 'scripts/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/**'
 
 jobs:
   build:
@@ -16,19 +33,30 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Check Chrome Web Store configuration
-        if: github.event_name == 'push'
+        if: github.event_name != 'pull_request'
         env:
           PUBLISHER_ID: ${{ vars.CHROME_PUBLISHER_ID }}
         run: ': "${PUBLISHER_ID:?Set the CHROME_PUBLISHER_ID repository variable to your Chrome Web Store publisher ID}"'
 
       - name: Install Dependencies
         run: sudo apt-get install -y jq moreutils zip
+
+      - name: Test publishing flow
+        run: pnpm test
 
       - name: Check JavaScript syntax
         run: node --check content.js
@@ -46,9 +74,9 @@ jobs:
           path: unsafelink.zip
 
       - name: Upload and submit to Chrome Web Store (API v2)
-        if: github.event_name == 'push'
-        # Omitting the subcommand uploads AND submits; `upload` alone only uploads.
-        run: npx --yes chrome-webstore-upload-cli@4.0.2 --source unsafelink.zip
+        if: github.event_name != 'pull_request'
+        # Status mode never uploads or submits. Publishing preserves dashboard rollout settings.
+        run: pnpm publish:cws ${{ github.event_name == 'workflow_dispatch' && inputs.mode == 'status' && '--status' || 'unsafelink.zip' }}
         env:
           PUBLISHER_ID: ${{ vars.CHROME_PUBLISHER_ID }}
           EXTENSION_ID: ${{ env.APP_ID }}

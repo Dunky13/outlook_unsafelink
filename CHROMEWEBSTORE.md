@@ -8,8 +8,10 @@ The extension replaces encoded Microsoft Safe Links with their original URLs on 
 
 ## Publishing configuration
 
-The build workflow uses Chrome Web Store API v2 through `chrome-webstore-upload-cli@4.0.2` on Node.js 24. It retains the existing `CLIENT_ID`, `CLIENT_SECRET`, and `REFRESH_TOKEN` repository secrets. The `CHROME_PUBLISHER_ID` repository variable must contain the publisher account ID from the Developer Dashboard, not the extension ID or display name. It is configured for this repository.
+The build workflow uses Chrome Web Store API v2 through the locked `chrome-webstore-upload@6.0.1` library on Node.js 24. It retains the existing `CLIENT_ID`, `CLIENT_SECRET`, and `REFRESH_TOKEN` repository secrets. The `CHROME_PUBLISHER_ID` repository variable must contain the publisher account ID from the Developer Dashboard, not the extension ID or display name. It is configured for this repository.
 
-Pull requests check syntax and package the extension without accessing the store. Pushes to `main` or `master` upload and submit for review. The existing `0.2.<workflow run number>` version scheme is preserved. Running the CLI without a subcommand requests `DEFAULT_PUBLISH`; `upload` alone would leave a draft. Existing store visibility and rollout settings remain in effect.
+Pull requests check syntax and package the extension without accessing the store. Pushes to `main` or `master` upload and submit for review. The existing `0.2.<workflow run number>` version scheme is preserved. The tested `scripts/publish-cws.mjs` checks versions, uploads, requests `DEFAULT_PUBLISH`, and reports provider status. `pnpm publish:cws --status` is read-only; the manually dispatched workflow defaults to status mode. Existing store visibility and rollout settings remain in effect.
 
 The package includes only the manifest, content script, images, and license. See the [migration handoff](docs/cws-api-v2.md) or its [offline HTML version](docs/cws-api-v2.html) for evidence and release checks. API acceptance, Google review, and public availability are distinct states.
+
+Documentation-only pushes no longer trigger publication. The October 20 live runs rejected the sibling extensions’ saved OAuth grants; reauthorisation is required before claiming a successful update. See the handoff for exact run evidence.
