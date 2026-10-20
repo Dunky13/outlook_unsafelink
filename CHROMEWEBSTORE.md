@@ -14,4 +14,4 @@ Pull requests check syntax and package the extension without accessing the store
 
 The package includes only the manifest, content script, images, and license. See the [migration handoff](docs/cws-api-v2.md) or its [offline HTML version](docs/cws-api-v2.html) for evidence and release checks. API acceptance, Google review, and public availability are distinct states.
 
-Documentation-only pushes no longer trigger publication. The October 20 live runs rejected the sibling extensions’ saved OAuth grants; reauthorisation is required before claiming a successful update. See the handoff for exact run evidence.
+Documentation-only pushes no longer trigger publication. The OAuth credentials were renewed on October 20 and the v2 status check succeeds. The first authenticated upload rejected malformed metadata in the three smaller PNG icons. See the [icon repair handoff](docs/cws-icon-metadata.md) and [offline HTML version](docs/cws-icon-metadata.html). Verify the corrected package in the next publication run.
