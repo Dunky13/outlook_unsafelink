@@ -8,7 +8,7 @@ The extension replaces encoded Microsoft Safe Links with their original URLs on 
 
 ## Publishing configuration
 
-The build workflow uses Chrome Web Store API v2 through the locked `chrome-webstore-upload@6.0.1` library on Node.js 24. It retains the existing `CLIENT_ID`, `CLIENT_SECRET`, and `REFRESH_TOKEN` repository secrets. The `CHROME_PUBLISHER_ID` repository variable must contain the publisher account ID from the Developer Dashboard, not the extension ID or display name. It is configured for this repository.
+The build workflow uses Chrome Web Store API v2 through the locked `chrome-webstore-upload@6.0.1` library on Node.js 26.12.1. It retains the existing `CLIENT_ID`, `CLIENT_SECRET`, and `REFRESH_TOKEN` repository secrets. The `CHROME_PUBLISHER_ID` repository variable must contain the publisher account ID from the Developer Dashboard, not the extension ID or display name. It is configured for this repository.
 
 Pull requests check syntax and package the extension without accessing the store. Pushes to `main` or `master` upload and submit for review. The existing `0.2.<workflow run number>` version scheme is preserved. The tested `scripts/publish-cws.mjs` checks versions, uploads, requests `DEFAULT_PUBLISH`, and reports provider status. `pnpm publish:cws --status` is read-only; the manually dispatched workflow defaults to status mode. Existing store visibility and rollout settings remain in effect.
 
